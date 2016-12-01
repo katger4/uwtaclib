@@ -1,0 +1,8 @@
+.idea
+.DS_Store
+old/*
+output/*
+tahoma/*.csv
+tahoma/*.xls
+tahoma/*.pdf
+tahoma/*.txt
