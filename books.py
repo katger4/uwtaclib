@@ -111,11 +111,12 @@ def get_names(data):
 # author name lists are exported from Zotero come in the form: "Hampson, Sarah; Simien, Evelyn M.; Kelly, Kristin; Huff, Jamie Cote", and need to be split up into separate columns for each firstname, middlename, and lastname. uwt affiliation/email addresses are added for one UWT author via the label_tac_author helper function below
 ###### WILL ONLY WORK if each author name is in "last name, first name" format when exported from Zotero ######
 def parse_names(row):
-	
+	# split the csv row/dict category 'author' into a list of individual author names (e.g. ["Hampson, Sarah", "Simien, Evelyn M.", "Kelly, Kristin", "Huff, Jamie Cote"])	
 	nl = re.split("; ", row['author'])
 
 	names_list = []
-
+	
+	# for each name in the list of all author names, split the name into "last name", "first name [middle initial, if there]" (e.g. ["Hampson", "Sarah"] or ["Simien", "Evelyn M."])
 	for i in nl:
 		name = re.split(", ", i)
 

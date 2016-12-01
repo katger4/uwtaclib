@@ -2,7 +2,7 @@
 import re
 import csv
 
-# copy the table of contents text from the tahoma west pdf into a blank txt document. in this case, it was easiest to format two txt files, one containing alternating lines (title /n genre) and the other (author /n fpage). ensure authors with middle names stay on one line, double check special character translation in titles/author names.
+# instructions to prepare text files prior to code implementation: copy the table of contents text from the tahoma west pdf into a blank txt document. in this case, it was easiest to format two txt files, one containing alternating lines (title /n genre) and the other (author /n fpage). ensure authors with middle names stay on one line, double check special character translation in titles/author names.
 
 # functions to extract even and odd lines separately from text files http://stackoverflow.com/questions/18047381/separate-odd-and-even-lines-in-a-generator-with-python
 def oddlines(filename):
