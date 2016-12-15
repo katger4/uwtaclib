@@ -39,12 +39,10 @@ def load_file(filename):
 
 			# update the dict with the newly edited values
 			newrow.update(newcontent)
-			
+
 			# remove extra columns
-			newrow.pop('automatic tags')
-			newrow.pop('library catalog')		
-			newrow.pop('call number')
-			newrow.pop('archive location')
+			newrow = remove_extra(newrow)
+			
 			# append the formatted dict (a row in the csv) to the full data list
 			data.append(newrow)
 
@@ -109,6 +107,12 @@ def edit_content(newrow):
 				dash = re.sub(r'(\d{4}-\d{2})(?!-)', r'\1-01', v)
 				newcontent['publication_date'] = dash	
 	return newcontent
+
+def remove_extra(newrow):
+	extra_col = ['automatic tags', 'library catalog', 'call number', 'archive location']
+	for i in extra_col:
+		newrow.pop(i)
+	return newrow
 ################### end load_file helper functions #########################
 
 # takes in the modified list of dicts from the 'load_file' function, iterates through each row/dict in the list, formats author names as a list of names using the helper functions below, then extends the list of names with empty strings so that the length of the names list matches the length of the author name headers, then zip the headers and author names as key-value pairs in order to update the row/dict with the new fields
