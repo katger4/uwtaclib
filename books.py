@@ -21,6 +21,36 @@ from titlecase import titlecase
 ###############################################################################
 
 # this function takes in the Zotero-export csv, represents the content as a list of python dictionaries, a.k.a. 'dicts', (where headers are keys and row-content is each value), then changes the Zotero generated headers to DC headers. then, Zotero-generated content for the 'document_type' field is converted to the DC-mandated style, allowing for conditional content creation based on the document type (e.g. whether to create_openurl and special field manipulation for reports/presentations). then, conditionally edit the content of specific header-values (e.g. publication titles --> titlecase, splitting up the page ranges into two separate columns, formatting dates), update the dict with these new values, remove dummy columns, and add each new row (as a dict) to the list of dicts called 'data' 
+def load_file(filename):
+	# open the Zotero export as a file object (note the utf-8 encoding to properly read the text encoding of the zotero output)
+	with open(filename, 'r', encoding='utf-8') as file:
+		# create empty array to hold each entry as a dict
+		data = []
+		
+		# create a csv-reader object
+		reader = csv.DictReader(file)
+		
+		# loop through each row in the csv-reader object...
+		for row in reader:
+
+			newrow = convert_headers(row)						
+			
+			newcontent = edit_content(newrow)
+
+			# update the dict with the newly edited values
+			newrow.update(newcontent)
+			
+			# remove extra columns
+			newrow.pop('automatic tags')
+			newrow.pop('library catalog')		
+			newrow.pop('call number')
+			newrow.pop('archive location')
+			# append the formatted dict (a row in the csv) to the full data list
+			data.append(newrow)
+
+	return data
+
+################### begin load_file helper functions #########################
 def convert_headers(row):
 	# iterate through each entry in the csv, convert headers (keys) to lowercase
 	newrow = {k.lower():v for k, v in row.items()}
@@ -36,9 +66,11 @@ def convert_headers(row):
 	newrow['cover_image_url'] = newrow.pop('archive')
 	newrow['title'] = newrow.pop('\ufeff"title"')
 	newrow['keywords'] = newrow.pop('extra')	
+	
 	return newrow
 
 def edit_content(newrow):
+	# create an empty dict to store the edited content
 	newcontent = {} 
 	for k, v in newrow.items():
 		
@@ -77,88 +109,7 @@ def edit_content(newrow):
 				dash = re.sub(r'(\d{4}-\d{2})(?!-)', r'\1-01', v)
 				newcontent['publication_date'] = dash	
 	return newcontent
-
-def load_file(filename):
-	# open the Zotero export as a file object (note the utf-8 encoding to properly read the text encoding of the zotero output)
-	with open(filename, 'r', encoding='utf-8') as file:
-		# create empty array to hold each entry as a dict
-		data = []
-		
-		# create a csv-reader object
-		reader = csv.DictReader(file)
-		
-		# loop through each row in the csv-reader object...
-		for row in reader:
-
-			newrow = convert_headers(row)
-
-			# # iterate through each entry in the csv, convert headers (keys) to lowercase
-			# newrow = {k.lower():v for k, v in row.items()}
-
-			# # then change the names of the headers from Zotero --> UWT style
-			# newrow['abstract'] = newrow.pop('abstract note')
-			# newrow['publication_date'] = newrow.pop('date')
-			# newrow['identifier'] = newrow.pop('isbn')
-			# newrow['city'] = newrow.pop('place')
-			# # source_fulltext_url points to e-book; 'archive location' points to print copy
-			# newrow['source_fulltext_url'] = newrow.pop('url')
-			# newrow['buy_link'] = newrow.pop('rights')
-			# newrow['cover_image_url'] = newrow.pop('archive')
-			# newrow['title'] = newrow.pop('\ufeff"title"')
-			# newrow['keywords'] = newrow.pop('extra')
-
-			# create a new blank dict to conditionally edit the values of some headers before updating the original dict with these new values
-			# newcontent = {} 
-			# for k, v in newrow.items():
-				
-			# 	# use the dummy Zotero fields 'library catalog', 'archive location', and 'call number' to create the text for the 'library_location' field (only works if the 'library catalog' field is filled in)
-			# 	if k == 'library catalog':
-			# 		if v != '':
-			# 			newcontent['library_location'] = '<p><a href="'+newrow['archive location']+'"><strong>Location: '+newrow['library catalog']+' - '+newrow['call number']+'</strong></a></p>'
-
-			# 	# convert case (uses titlecase module)
-			# 	elif k == 'publisher':
-			# 		if v != '':
-			# 			newcontent['publisher'] = titlecase(v)
-
-			# 	elif k == 'title':
-			# 		if v != '':
-			# 			newcontent['title'] = titlecase(v)
-
-			# 	# find and replace semicolon separators in keywords column with commas, then save this list as the keywords value
-			# 	elif k == 'keywords':
-			# 		if v != '':
-			# 			cs = v.replace(';', ',')
-			# 			newcontent['keywords'] = cs
-				
-			# 	# find and replace semicolon separators in keywords column with commas, then save this list as the keywords value
-			# 	elif k == 'automatic tags':
-			# 		if v != '':
-			# 			cs = v.replace(';', ',')
-			# 			newcontent['keywords'] = cs
-
-			# 	# if the date format is yyyy-mm NOT yyyy or yyyy-mm-dd or NONE, add in '-01' to complete the date for excel readability
-			# 	elif k == 'publication_date':
-			# 		# print(v)
-			# 		yr_mon = re.match(r'\d{4}-\d{2}(?!-)', v)
-			# 		if yr_mon != None:
-			# 			# print(yr_mon)
-			# 			dash = re.sub(r'(\d{4}-\d{2})(?!-)', r'\1-01', v)
-			# 			newcontent['publication_date'] = dash						
-			
-			newcontent = edit_content(newrow)
-
-			# update the dict with the newly edited values
-			newrow.update(newcontent)
-			# remove extra columns
-			newrow.pop('automatic tags')
-			newrow.pop('library catalog')		
-			newrow.pop('call number')
-			newrow.pop('archive location')
-			# append the formatted dict (a row in the csv) to the full data list
-			data.append(newrow)
-
-	return data
+################### end load_file helper functions #########################
 
 # takes in the modified list of dicts from the 'load_file' function, iterates through each row/dict in the list, formats author names as a list of names using the helper functions below, then extends the list of names with empty strings so that the length of the names list matches the length of the author name headers, then zip the headers and author names as key-value pairs in order to update the row/dict with the new fields
 def get_names(data):
