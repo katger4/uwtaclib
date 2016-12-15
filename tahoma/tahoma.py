@@ -42,17 +42,14 @@ fpages.append(finalpage)
 # create a list of last pages by subtracting 1 from each subsequent first page (remove the first first page after this bc it will just be zero)
 lpages = [i - 1 for i in fpages]
 lpages.remove(0)
+#################### UNTESTED
+# remove the fake finalpage (here, 92)
+lpages.remove(-1)
+# and append the real finalpage
+lpages.append(finalpage)
+#################### END
 # remove the final page that was added to the fpages list
 fpages.pop(-1)
-
-# create the list of fulltext_url's using the titles list and removing special characters, replacing whitespace with '_'
-fulltext_url = []
-for i in titles:
-	alphatitle = re.sub("[^a-zA-Z\s]+", "", i)
-	wordlist = alphatitle.split(" ")
-	combo = '_'.join(wordlist)
-	url = '*\\2016_'+combo+'.pdf'
-	fulltext_url.append(url)
 
 # split up the full author names into first, middle, and last name lists (middle names will be blank "" if no middle name listed)
 fnames = []
@@ -68,6 +65,16 @@ for i in authors:
 		fnames.append(namelist[0])
 		mnames.append(namelist[1])
 		lnames.append(namelist[2])	
+
+# create the list of fulltext_url's using the titles list and removing special characters, replacing whitespace with '_'
+fulltext_url = []
+lname_title = list(zip(lnames, titles))
+for i in lname_title:
+	alphatitle = re.sub("[^a-zA-Z\s]+", "", i[1])
+	wordlist = alphatitle.split(" ")
+	titlecombo = '_'.join(wordlist)
+	url = '*\\2016_TW_'+i[0]+'_'+titlecombo+'.pdf'
+	fulltext_url.append(url)
 
 # print(len(lnames))
 # print(len(mnames))

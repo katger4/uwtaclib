@@ -1,11 +1,10 @@
 #! python3
+# import PyPDF2
 import csv
 import re
 import os
 
 # drag each tahoma west work into a new folder in the cwd IN ORDER based on page number (add a 0 to the first work so the nautral sort will work & make sure there is one file per title), create the tahoma west metadata using the tahoma.py script
-
-# BE SURE TO COPY THE UNNAMED FILES INTO A SEPARATE FOLDER PRIOR TO RUNNING THIS SCRIPT (there is no 'undo' once files are renamed, so if errors are made you will have to re-drag all the files unless you make backup copies)
 
 # load the csv file containing tahoma west metadata, store that information as a dict
 def load_csv(filename):
@@ -16,51 +15,64 @@ def load_csv(filename):
 			data.append(row)
 	return data
 
-# create a sorted list of titles (using page numbers as a reference), with non-alpha characters removed and spaces replaced with '_', then store the sorted titles (without corresponding page numbers) in a new list
-def get_num_titles(data):
-	
-	num_title = []
-	
+# create a sorted list of titles (alphabetically), with non-alpha characters removed and spaces replaced with '_', then store the sorted titles in a new list
+def get_titles(data):
+	title_file_list = []
 	for i in data:
-		pg = int(i['fpage'])
+		title = i['title']
+
+		alphatitle = re.sub("[^a-zA-Z\s]+", "", title)
+		wordlist = alphatitle.split(" ")
+		combo = '_'.join(wordlist)
+		# title_list.append(combo)
 		full_url = i['fulltext_url']
 		url = full_url[2:]
-		title_file = (pg,url)
-		num_title.append(title_file)
+
+		title_file = (combo,url)
+		title_file_list.append(title_file)
+
+	# lname_list = []
+	# for i in data:
+	# 	lname_list.append(i['author1_lname'])
+
+	# lname_title = list(zip(lname_list, title_list))
 	
-	num_title.sort()
-	# print(num_title)
+	# title_file_list = []
+	# for i in lname_title:
+	# 	url = '2016_TW_'+i[0]+'_'+i[1]+'.pdf'
+	# 	title_file = (i[1],url)
+	# 	title_file_list.append(title_file)
+
+
+	title_file_list.sort()
+	# print(title_list)
 	# return num_title
 
 	stitles = []
 	# only need this titles for now...
 	# for i in num_title[12:-1]:
-	for i in num_title:
+	for i in title_file_list:
 		stitles.append(i[1])
 	return stitles
 # print(num_title)
 ####################################################
 data = load_csv('test.csv')
 # print(data[0])
-stitles = get_num_titles(data)
-# print(stitles)
+stitles = get_titles(data)
+print(stitles)
 ####################################################
 
-# function to sort filenames in a directory using integer values, rather than string sorting http://stackoverflow.com/questions/4836710/does-python-have-a-built-in-function-for-string-natural-sort
-def natural_sort(l): 
-	convert = lambda text: int(text) if text.isdigit() else text.lower() 
-	alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ] 
-	return sorted(l, key = alphanum_key)
-
-# using a directory of pdf's named 'Tahoma_West_2016_Inside_Final (dragged) 0.pdf' : 'Tahoma_West_2016_Inside_Final (dragged) NUM.pdf', create a list of all the current file names, sorted naturally, then create a list of new file names using the sorted title list, then iterate through both lists, using 'zip' rename each filein order
+# using a directory of pdf's named with each title only, create a list of all the current file names, sorted by title, then create a list of new file names using the sorted title list, then iterate through both lists, using 'zip' rename each filein order
 def rename_pdfs(root):
 	directory = os.listdir(root)
 
 	oldnames = []
-	for filename in natural_sort(directory):
+	for filename in directory:
 		if filename.endswith('.pdf'):
 			oldname = os.path.join(root, filename)
 			oldnames.append(oldname)
+	oldnames.sort()
+	print(oldnames)
 	newnames = []
 	for i in stitles:
 		newname = os.path.join(root, i)
@@ -69,5 +81,5 @@ def rename_pdfs(root):
 	for i, j in zip(oldnames, newnames):
 		os.rename(i, j)
 ####################################################
-rename_pdfs('twb2')
+# rename_pdfs('tw')
 ####################################################

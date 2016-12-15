@@ -2,23 +2,41 @@ import re
 import csv
 from titlecase import titlecase
 
-# this python3 script takes in the Zotero export generated csv of all BOOKs and outputs a csv using the headers and text formatting necessary for upload to digital commons
+# this python3 script takes in the Zotero export generated csv of all BOOK publications and outputs a csv using the headers and text formatting necessary for upload to digital commons
 
-# NOTE: the output csv should be opened in Excel and scanned for errors, then saved as a '.xls' file (NOT '.xlsx')
+###### WILL ONLY WORK if each author name is in "last name, first name" format when exported from Zotero ######
+
+# NOTE: since Zotero lacks some fields that we require, some 'dummy' categories are used to store information in Zotero (if they are left blank, the script will still run). in order to utilize this script most effectively (and to reduce the amount of manual entry required), make use of the following fields in Zotero (see Anne Bartlett's books in Zotero/SIAS for an example):
+
+	# 1. URL - this field should contain the link to the e-book version of this book in the UW libraries (if available)
+	# 2. Archive - this field should contain the link to the cover image of this book (if available)
+	# 3. Loc. in Archive - this field should contain the link to the print copy of this book in the UW libraries (if available)
+	# 4. Library Catalog - this field should contain the location of the print copy of the book in the UW Libraries (e.g. 'UW Tacoma Library Faculty Publications' or 'Summit libraries')
+	# 5. Call Number - if the print copy of this book is in the UW Libraries, this field should contain its call number (e.g. 'PR275.R4 B37 1995')
+	# 6. Rights - this field should contain the link to purchase a copy of this book (if available)
+	# 7. Extra - this field should contain a comma separated list of keywords (if available)
+
+# NOTE: the output csv should be opened in Excel and scanned for errors (manually formatting dates to be in yyyy-mm-dd format if all date fields are present, if just yyyy - do not re-format), then saved as a '.xls' file (NOT '.xlsx')
 
 ###############################################################################
-# this function takes in the Zotero-export csv, represents the content as a list of python dicts (where headers are keys and row-content is each value), then changes the Zotero generated headers to DC headers. then, conditionally edit the content of specific header-values (e.g. publication titles --> titlecase, splitting up the page ranges into two separate columns, formatting dates), update the dict with these new values, remove dummy columns, and add each new row (as a dict) to the list of dicts called 'data' 
+
+# this function takes in the Zotero-export csv, represents the content as a list of python dictionaries, a.k.a. 'dicts', (where headers are keys and row-content is each value), then changes the Zotero generated headers to DC headers. then, Zotero-generated content for the 'document_type' field is converted to the DC-mandated style, allowing for conditional content creation based on the document type (e.g. whether to create_openurl and special field manipulation for reports/presentations). then, conditionally edit the content of specific header-values (e.g. publication titles --> titlecase, splitting up the page ranges into two separate columns, formatting dates), update the dict with these new values, remove dummy columns, and add each new row (as a dict) to the list of dicts called 'data' 
+
 def load_file(filename):
-	# see baby-names for os stuff files_list = os.listdir(directory)
+	# open the Zotero export as a file object (note the utf-8 encoding to properly read the text encoding of the zotero output)
 	with open(filename, 'r', encoding='utf-8') as file:
 		# create empty array to hold each entry as a dict
 		data = []
-
+		
+		# create a csv-reader object
 		reader = csv.DictReader(file)
 		
+		# loop through each row in the csv-reader object...
 		for row in reader:
+
 			# iterate through each entry in the csv, convert headers (keys) to lowercase
 			newrow = {k.lower():v for k, v in row.items()}
+
 			# then change the names of the headers from Zotero --> UWT style
 			newrow['abstract'] = newrow.pop('abstract note')
 			newrow['publication_date'] = newrow.pop('date')
@@ -30,13 +48,12 @@ def load_file(filename):
 			newrow['cover_image_url'] = newrow.pop('archive')
 			newrow['title'] = newrow.pop('\ufeff"title"')
 			newrow['keywords'] = newrow.pop('extra')
-			#newrow['library_location'] = newrow.pop('library catalog')
 
 			# create a new blank dict to conditionally edit the values of some headers before updating the original dict with these new values
 			newcontent = {} 
 			for k, v in newrow.items():
 				
-				# use the dummy Zotero fields 'library catalog', 'archive location', and 'call number' to create the text for the 'library_location' field
+				# use the dummy Zotero fields 'library catalog', 'archive location', and 'call number' to create the text for the 'library_location' field (only works if the 'library catalog' field is filled in)
 				if k == 'library catalog':
 					if v != '':
 						newcontent['library_location'] = '<p><a href="'+newrow['archive location']+'"><strong>Location: '+newrow['library catalog']+' - '+newrow['call number']+'</strong></a></p>'
@@ -49,6 +66,12 @@ def load_file(filename):
 				elif k == 'title':
 					if v != '':
 						newcontent['title'] = titlecase(v)
+
+				# find and replace semicolon separators in keywords column with commas, then save this list as the keywords value
+				elif k == 'keywords':
+					if v != '':
+						cs = v.replace(';', ',')
+						newcontent['keywords'] = cs
 				
 				# find and replace semicolon separators in keywords column with commas, then save this list as the keywords value
 				elif k == 'automatic tags':
@@ -56,7 +79,7 @@ def load_file(filename):
 						cs = v.replace(';', ',')
 						newcontent['keywords'] = cs
 
-				# if the date format is yyyy-mm NOT yyyy or yyyy-mm-dd or NONE, add in '-01' to complete the date
+				# if the date format is yyyy-mm NOT yyyy or yyyy-mm-dd or NONE, add in '-01' to complete the date for excel readability
 				elif k == 'publication_date':
 					# print(v)
 					yr_mon = re.match(r'\d{4}-\d{2}(?!-)', v)
@@ -175,11 +198,15 @@ def write(data, output):
 ###############################################################################
 
 # get data from user and run each function
-filename = input("Enter the filename: ")
+filename = input("Enter the Zotero-export filename: ")
 data = load_file(filename)
+print("loading the file and renaming headers...")
 uwt_name = input("Enter the UWT author's name: ")
 uwt_email = input("Enter the UWT author's email: ")
-output = input("Enter the name of the new file generated: ")
+print("processing author names...")
 names = get_names(data)
+output = input("Enter the name of the new file generated: ")
+print("writing the new csv file...")
 write(names, output)
+
 ###############################################################################
