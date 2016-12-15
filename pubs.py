@@ -11,19 +11,19 @@ from titlecase import titlecase
 	# Extra - this field should contain a comma separated list of keywords (if available)
 	
 	# For Book Chapters, and Encyclopedia Articles:
-		# Archive - this field should contain the APA formatted bibliographic citation of the publication (see 'Holy Women of the British Isles' by Anne Bartlett in Zotero/SIAS for an example)
-		# URL - this field should contain the link to the e-book version of the containing book/encyclopedia in the UW libraries (if available), or the print copy of the book/encyclopedia in the UW Libraries (see 'Holy Women of the British Isles' by Anne Bartlett in Zotero/SIAS for an example)
+	# 	Archive - this field should contain the APA formatted bibliographic citation of the publication (see 'Holy Women of the British Isles' by Anne Bartlett in Zotero/SIAS for an example)
+	# 	URL - this field should contain the link to the e-book version of the containing book/encyclopedia in the UW libraries (if available), or the print copy of the book/encyclopedia in the UW Libraries (see 'Holy Women of the British Isles' by Anne Bartlett in Zotero/SIAS for an example)
 
 	# For Conference Papers:
-		# Proceedings Title - this field should contain the source publication information (sometimes this is included in Zotero's 'Conference Name' field automatically, so make sure it is in the right place before exporting, see Wes Lloyd's conference papers in Zotero/Institue of Technology)
+	# 	Proceedings Title - this field should contain the source publication information (sometimes this is included in Zotero's 'Conference Name' field automatically, so make sure it is in the right place before exporting, see Wes Lloyd's conference papers in Zotero/Institue of Technology)
 
 	# For Reports:
-		# Institution - this field should contain the source publication information (see 'Still segregated, still unequal: Analyzing the impact of No Child Left Behind on African American students' by Christopher Knaus in Zotero/Education)
-		# Archive - this field should contain the APA formatted bibliographic citation of the report (see 'Still segregated, still unequal: Analyzing the impact of No Child Left Behind on African American students' by Christopher Knaus in Zotero/Education)
+	# 	Institution - this field should contain the source publication information (see 'Still segregated, still unequal: Analyzing the impact of No Child Left Behind on African American students' by Christopher Knaus in Zotero/Education)
+	# 	Archive - this field should contain the APA formatted bibliographic citation of the report (see 'Still segregated, still unequal: Analyzing the impact of No Child Left Behind on African American students' by Christopher Knaus in Zotero/Education)
 
 	# For Presentations:
-		# Meeting Name - this field should contain the source publication information
-		# Language - this field should contain the APA formatted bibliographic citation of the presentation (see 'Types of Bullying Behaviors Associated With Selected Characteristics' by Susan Johnson in Zotero/Nursing for an example)
+	# 	Meeting Name - this field should contain the source publication information
+	# 	Language - this field should contain the APA formatted bibliographic citation of the presentation (see 'Types of Bullying Behaviors Associated With Selected Characteristics' by Susan Johnson in Zotero/Nursing for an example)
 
 # NOTE: the output csv should be opened in Excel and scanned for errors (manually formatting dates to be in yyyy-mm-dd format if all date fields are present, if just yyyy - do not re-format), then saved as a '.xls' file (NOT '.xlsx')
 

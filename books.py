@@ -185,7 +185,7 @@ def parse_names(row):
 	return names_list
 
 # this is a helper function, called in the 'parse_names' function above, and works best when only 1 UWT author's publications are being processed in the csv (other UWT author's affiliation/email will need to be manually entered otherwise)
-# this function takes in the UWT author's name and email address (input by the user), as well as the list of author names from the Zotero export, partially processed in parse_names, then adds the input email address and UWT affiliation to each author to each name partially matching the input UWT author name (only the first initial and lastname must match)
+# this function takes in the UWT author's name and email address (input by the user), as well as the list of author names from the Zotero export, partially processed in parse_names, then adds the input email address and UWT affiliation to each name matching the input UWT author name (only the first initial and lastname must match)
 def label_tac_author(fullname, uwt_name, uwt_email):
 	# create a 3 item list from the input author name, using a blank space placeholder for the middle initial if none provided
 	uwt_list = uwt_name.split()
