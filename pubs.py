@@ -49,11 +49,7 @@ def load_file(filename):
 			newrow.update(newcontent)
 
 			# remove extra columns
-			newrow = remove_extra(newrow)
-			# newrow.pop('automatic tags')
-			# newrow.pop('publisher')
-			# newrow.pop('meeting name')	
-			# newrow.pop('language')		
+			newrow = remove_extra(newrow)	
 
 			# append the formatted dict (a row in the csv) to the full data list
 			data.append(newrow)
@@ -206,6 +202,7 @@ def get_names(data):
 	# print(data[0])
 	return data
 
+################### begin get_names helper functions #########################
 # this is a helper function, called in the "get_names" function above
 # author name lists are exported from Zotero come in the form: "Hampson, Sarah; Simien, Evelyn M.; Kelly, Kristin; Huff, Jamie Cote", and need to be split up into separate columns for each firstname, middlename, and lastname. uwt affiliation/email addresses are added for one UWT author via the label_tac_author helper function below
 ###### WILL ONLY WORK if each author name is in "last name, first name" format when exported from Zotero ######
@@ -249,7 +246,7 @@ def parse_names(row):
 	return names_list
 
 # this is a helper function, called in the 'parse_names' function above, and works best when only 1 UWT author's publications are being processed in the csv (other UWT author's affiliation/email will need to be manually entered otherwise)
-# this function takes in the UWT author's name and email address (input by the user), as well as the list of author names from the Zotero export, partially processed in parse_names, then adds the input email address and UWT affiliation to each author to each name partially matching the input UWT author name (only the first initial and lastname must match)
+# this function takes in the UWT author's name and email address (input by the user), as well as the list of author names from the Zotero export, partially processed in parse_names, then adds the input email address and UWT affiliation to each name matching the input UWT author name (only the first initial and lastname must match)
 def label_tac_author(fullname, uwt_name, uwt_email):
 	# create a 3 item list from the input author name, using a blank space placeholder for the middle initial if none provided
 	uwt_list = uwt_name.split()
@@ -262,6 +259,8 @@ def label_tac_author(fullname, uwt_name, uwt_email):
 		fullname[5] = "University of Washington Tacoma"
 	# print(fullname)
 	return fullname
+################### end get_names helper functions #########################
+
 
 # use the dictwriter function from the csv module to export the list of dicts as a csv using the headers/fieldnames list and a character encoding that can be read by excel
 # NOTE: if terminal ouputs a weird utf-8 error, then some extreme character has been encoded by zotero, and manual utf-8 characters will need to be loaded by excel separately
@@ -282,14 +281,17 @@ def write(data, output):
 
 # get data from user and run each function
 filename = input("Enter the Zotero-export filename: ")
-data = load_file(filename)
 print("loading the file and renaming headers...")
+data = load_file(filename)
+print("successfully loaded the file and renamed headers!")
 uwt_name = input("Enter the UWT author's name: ")
 uwt_email = input("Enter the UWT author's email: ")
 print("processing author names...")
 names = get_names(data)
+print("successfully separated author names!")
 output = input("Enter the name of the new file generated: ")
 print("writing the new csv file...")
 write(names, output)
+print("new file created!")
 
 ###############################################################################
