@@ -42,12 +42,12 @@ fpages.append(finalpage)
 # create a list of last pages by subtracting 1 from each subsequent first page (remove the first first page after this bc it will just be zero)
 lpages = [i - 1 for i in fpages]
 lpages.remove(0)
-#################### UNTESTED
+
 # remove the fake finalpage (here, 92)
-lpages.remove(-1)
+lpages.pop(-1)
 # and append the real finalpage
 lpages.append(finalpage)
-#################### END
+
 # remove the final page that was added to the fpages list
 fpages.pop(-1)
 
