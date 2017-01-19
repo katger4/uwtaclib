@@ -28,15 +28,24 @@ def evenlines(filename):
 
 ####################################################
 # obtain a list of each of the following fields from the 2 txt files
-authors = evenlines('aupg.txt')
-fpages = oddlines('aupg.txt')
-genres = oddlines('titgen.txt')
-titles = evenlines('titgen.txt')
+aupg_filename = input("Enter the name of the text file containing authors and page numbers: ")
+titgen_filename = input("Enter the name of the text file containing titles and genres: ")
+print("loading the files...")
+authors = evenlines(aupg_filename)
+fpages = oddlines(aupg_filename)
+genres = oddlines(titgen_filename)
+titles = evenlines(titgen_filename)
+# authors = evenlines('aupg.txt')
+# fpages = oddlines('aupg.txt')
+# genres = oddlines('titgen.txt')
+# titles = evenlines('titgen.txt')
 
 # convert fpage values to int type for sorting
 fpages = [int(i) for i in fpages]
 # determine the final page of the last entry from the pdf
-finalpage = 93
+finalpage = int(input("Enter the final page of publications: "))
+print("processing page numbers...")
+# finalpage = 93
 # add the final page to the first page list
 fpages.append(finalpage)
 # create a list of last pages by subtracting 1 from each subsequent first page (remove the first first page after this bc it will just be zero)
@@ -51,6 +60,7 @@ lpages.append(finalpage)
 # remove the final page that was added to the fpages list
 fpages.pop(-1)
 
+print("processing author names...")
 # split up the full author names into first, middle, and last name lists (middle names will be blank "" if no middle name listed)
 fnames = []
 mnames = []
@@ -66,6 +76,7 @@ for i in authors:
 		mnames.append(namelist[1])
 		lnames.append(namelist[2])	
 
+print("creating fulltext_url's...")
 # create the list of fulltext_url's using the titles list and removing special characters, replacing whitespace with '_'
 fulltext_url = []
 lname_title = list(zip(lnames, titles))
@@ -80,6 +91,7 @@ for i in lname_title:
 # print(len(mnames))
 # print(len(fnames))
 
+print("linking data to headers...")
 # link up all generated lists using the zip function
 values = list(zip(titles, fulltext_url, fnames, mnames, lnames, genres, fpages, lpages))
 # print(values[1])
@@ -103,5 +115,7 @@ def write(data):
 		dict_writer.writeheader()
 		dict_writer.writerows(data)
 ####################################################
+print("writing metadata to file...")
 write(data)
+print("metadata generated!")
 ####################################################
