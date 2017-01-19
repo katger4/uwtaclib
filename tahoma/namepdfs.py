@@ -40,7 +40,10 @@ def get_num_titles(data):
 	return stitles
 # print(num_title)
 ####################################################
-data = load_csv('test.csv')
+filename = input("Enter the Tahoma West metadata filename: ")
+print("loading the file and obtaining filenames...")
+data = load_csv(filename)
+# data = load_csv('test.csv')
 # print(data[0])
 stitles = get_num_titles(data)
 # print(stitles)
@@ -69,5 +72,9 @@ def rename_pdfs(root):
 	for i, j in zip(oldnames, newnames):
 		os.rename(i, j)
 ####################################################
-rename_pdfs('twb2')
+directory = input("Enter the folder name containing dragged pdfs: ")
+print("sorting the files, renaming according to metadata...")
+rename_pdfs(directory)
+# rename_pdfs('twb2')
+print("files renamed!")
 ####################################################
