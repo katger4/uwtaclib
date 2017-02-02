@@ -35,11 +35,11 @@ TODAY = str(input("Enter today's date: "))
 footer = '</tbody></table><p style="line-height: 20.8px;">Updated '+TODAY+'</p>'
 htmlfile.write(footer)
 
-# pretty print the html file using BeautifulSoup (install with 'pip3 install beautifulsoup4' if module not found)
-soup = BeautifulSoup(open('swank-table.html'), "html.parser")
-prettyHTML = soup.prettify()
-# Opening a file creates it and (unless append ('a') is set) overwrites it with emptyness
-htmlfile.close()
-prettyfile = open('swank-table.html',"w")
-prettyfile.write(prettyHTML)
+# # pretty print the html file using BeautifulSoup (install with 'pip3 install beautifulsoup4' if module not found)
+# soup = BeautifulSoup(open('swank-table.html'), "html.parser")
+# prettyHTML = soup.prettify()
+# # Opening a file creates it and (unless append ('a') is set) overwrites it with emptyness
+# htmlfile.close()
+# prettyfile = open('swank-table.html',"w")
+# prettyfile.write(prettyHTML)
 print('New Swank table generated!')
