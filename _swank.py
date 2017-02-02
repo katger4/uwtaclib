@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 reader = csv.reader(open('digcampus_export.csv'))
 
 # Create the HTML file for output
-htmlfile = open('swank-table.html',"w")
+htmlfile = open('swanktable.html',"w")
 
 # initialize rownum variable
 # rownum = 0
@@ -35,11 +35,16 @@ TODAY = str(input("Enter today's date: "))
 footer = '</tbody></table><p style="line-height: 20.8px;">Updated '+TODAY+'</p>'
 htmlfile.write(footer)
 
-# pretty print the html file using BeautifulSoup (install with 'pip3 install beautifulsoup4' if module not found)
-soup = BeautifulSoup(open('swank-table.html'), "html.parser")
-prettyHTML = soup.prettify()
-# Opening a file creates it and (unless append ('a') is set) overwrites it with emptyness
-htmlfile.close()
-prettyfile = open('swank-table.html',"w")
-prettyfile.write(prettyHTML)
+# # pretty print the html file using BeautifulSoup (install with 'pip3 install beautifulsoup4' if module not found)
+# soup = BeautifulSoup(open('swanktable.html'), "html.parser")
+# prettyHTML = soup.prettify()
+# # Opening a file creates it and (unless append ('a') is set) overwrites it with emptyness
+# htmlfile.close()
+# prettyfile = open('swanktable.html',"w")
+# prettyfile.write(prettyHTML)
 print('New Swank table generated!')
+
+# soup = BeautifulSoup(open('swanktable.html'), "html.parser")
+# with open('swanktable.html', 'w') as f:
+# 	for line in soup.prettify('utf-8', 'minimal'):
+# 		f.write(str(line))
