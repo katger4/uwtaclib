@@ -63,6 +63,7 @@ def get_web_info(weblink):
 	title_items = soup.select('h4.artifact-title a')
 	title_names = [i.get_text() for i in title_items]
 	
+	link_items = soup.select('h4.artifact-title a[href]')
 	link_text = [i['href'] for i in link_items]
 	full_link_text = ['https://digital.lib.washington.edu'+i for i in link_text]
 
@@ -73,35 +74,6 @@ def get_web_info(weblink):
 
 	keys = ['title','link','author']
 	values = list(zip(title_names,full_link_text,aulist_list))
-	web_info = dict(zip(keys, values))
+	web_info = [dict(zip(keys, v)) for v in values]
 	return web_info
-# print(get_web_info("https://digital.lib.washington.edu/researchworks/handle/1773/20063/browse?rpp=20&sort_by=2&type=dateissued&offset=0&etal=-1&order=ASC"))
-page = requests.get("https://digital.lib.washington.edu/researchworks/handle/1773/20063/browse?rpp=20&sort_by=2&type=dateissued&offset=0&etal=-1&order=ASC")
-soup = BeautifulSoup(page.content, 'html.parser')
-title_items = soup.select('h4.artifact-title a')
-link_items = soup.select('h4.artifact-title a[href]')
-# longlink_items = soup.find_all('h4' class_ = artifact-title)
-# link_items =  longlink_items.find_all('a', href = True)
-
-au_items = soup.select('div.artifact-info')
-title_names = [i.get_text() for i in title_items]
-link_text = [i['href'] for i in link_items]
-full_link_text = ['https://digital.lib.washington.edu'+i for i in link_text]
-
-au_text = [i.get_text() for i in au_items]
-alphanum_au = get_alpha_titles(au_text)
-aulist_list = [re.findall('[%A-Za-z]+', i) for i in alphanum_au]
-
-keys = ['title','link','author']
-values = list(zip(title_names,full_link_text,aulist_list))
-
-web_info = [dict(zip(keys, v)) for v in values]
-# for v in values:
-# 	web = {}
-# 	web['title'] = v[0]
-# 	web['link'] = v[1]
-# 	web['author'] = v[2]
-# 	web_info.append(web)
-
-# web_info = {k: v for k, v in zip(keys, values)}
-print(web_info)
+print(get_web_info("https://digital.lib.washington.edu/researchworks/handle/1773/20063/browse?rpp=20&sort_by=2&type=dateissued&offset=0&etal=-1&order=ASC"))
