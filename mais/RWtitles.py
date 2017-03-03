@@ -95,13 +95,13 @@ aulist_list = [re.findall('[%A-Za-z]+', i) for i in alphanum_au]
 keys = ['title','link','author']
 values = list(zip(title_names,full_link_text,aulist_list))
 
-web_info = []
-for v in values:
-	web = {}
-	web['title'] = v[0]
-	web['link'] = v[1]
-	web['author'] = v[2]
-	web_info.append(web)
+web_info = [dict(zip(keys, v)) for v in values]
+# for v in values:
+# 	web = {}
+# 	web['title'] = v[0]
+# 	web['link'] = v[1]
+# 	web['author'] = v[2]
+# 	web_info.append(web)
 
 # web_info = {k: v for k, v in zip(keys, values)}
 print(web_info)
