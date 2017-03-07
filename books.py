@@ -106,6 +106,10 @@ def edit_content(newrow):
 				# print(yr_mon)
 				dash = re.sub(r'(\d{4}-\d{2})(?!-)', r'\1-01', v)
 				newcontent['publication_date'] = dash	
+		elif k == 'abstract':
+			if v != '':
+				newcontent['abstract'] = v.replace(u"\u2015", "-")
+
 	return newcontent
 
 def remove_extra(newrow):
