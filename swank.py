@@ -27,7 +27,7 @@ for row in reader:
 	LINK = row[2]
 	DATE = row[6]
 
-	htmlfile.write('<td class="ck_border" height="21" style="height: 21px; padding: 2px; border: 1px solid rgb(221, 221, 221);"><a href="'+LINK+'</td>''">'+TITLE+'</a></td><td align="right" class="ck_border" style="padding: 2px; border: 1px solid rgb(221, 221, 221);">'+YEAR+'</td><td align="right" class="ck_border" style="padding: 2px; border: 1px solid rgb(221, 221, 221);">'+DATE+'</td>')
+	htmlfile.write('<td class="ck_border" height="21" style="height: 21px; padding: 2px; border: 1px solid rgb(221, 221, 221);"><a href="'+LINK+'"</td>'+TITLE+'</a></td><td align="right" class="ck_border" style="padding: 2px; border: 1px solid rgb(221, 221, 221);">'+YEAR+'</td><td align="right" class="ck_border" style="padding: 2px; border: 1px solid rgb(221, 221, 221);">'+DATE+'</td>')
 
 	htmlfile.write('</tr>')
 
