@@ -75,7 +75,7 @@ def edit_content(newrow):
 		# use the dummy Zotero fields 'library catalog', 'archive location', and 'call number' to create the text for the 'library_location' field (only works if the 'library catalog' field is filled in)
 		if k == 'library catalog':
 			if v != '':
-				newcontent['library_location'] = '<p><a href="'+newrow['archive location']+'"><strong>Location: '+newrow['library catalog']+' - '+newrow['call number']+'</strong></a></p>'
+				newcontent['library_location'] = '<p><a href="'+newrow['archive location']+'"><strong>Print copy in '+newrow['library catalog']+' - '+newrow['call number']+'</strong></a></p>'
 
 		# convert case (uses titlecase module)
 		elif k == 'publisher':
