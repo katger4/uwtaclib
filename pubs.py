@@ -103,6 +103,10 @@ def convert_headers(row):
 		newrow['create_openurl'] = 'FALSE'
 		# if the document is a report, use the entry in the 'publisher' category as the source_publication entry
 		newrow['source_publication'] = newrow['publisher']		
+	# if the document is a creative work in a literary magazine, rename the doc type
+	elif newrow['document_type'] == 'magazineArticle':
+		newrow['document_type'] = 'creative'
+		newrow['create_openurl'] = 'FALSE'	
 	
 	return newrow
 
