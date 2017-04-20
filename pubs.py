@@ -107,6 +107,10 @@ def convert_headers(row):
 	elif newrow['document_type'] == 'magazineArticle':
 		newrow['document_type'] = 'creative'
 		newrow['create_openurl'] = 'FALSE'	
+	# if the document is an op-ed, rename the doc type
+	elif newrow['document_type'] == 'blogPost':
+		newrow['document_type'] = 'editorial'
+		newrow['create_openurl'] = 'FALSE'	
 	
 	return newrow
 
