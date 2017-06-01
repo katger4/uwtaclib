@@ -21,4 +21,7 @@ tahoma/name-errors/
 tahoma/pdfNotes.py
 tahoma/tahoma-metadata-test.ipynb
 tahoma/twee.py
+copyFiles.py
+fixLibLoc.ipynb
+titles.py
 
