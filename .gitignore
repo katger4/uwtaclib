@@ -12,3 +12,13 @@ tahoma/tw-backup/
 data/
 mais/.ipynb_checkpoints/
 .ipynb_checkpoints/
+tahoma/duplicate-crop/
+.ipynb_checkpoints
+__pycache__
+tahoma/tw-named-files/
+tahoma/tw-unnamed-backup/
+tahoma/name-errors/
+tahoma/pdfNotes.py
+tahoma/tahoma-metadata-test.ipynb
+tahoma/twee.py
+
