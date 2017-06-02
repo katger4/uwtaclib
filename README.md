@@ -2,7 +2,7 @@
 
 Scripts to automate uwt digital commons faculty publication metadata, swank html tables, pdf splitting for tahoma west, and mais metadata 
 
-**Overall Process To Automate UWT Digital Commons Faculty Publication Metadata****:**
+## Process Zotero-exported metadata for import into Digital Commons:
 
 1. Obtain publication record
 
@@ -64,7 +64,7 @@ Scripts to automate uwt digital commons faculty publication metadata, swank html
 
 * If you see this error: `IndexError: list index out of range` then there has been an error with the author-names field from the Zotero export. This probably indicates that book-authors were exported as book-editors, so change this in Zotero, re-export, and try again.
 
-**How to Use the Swank Update Scripts**:
+## How to Use the Swank Update Scripts:
 
 1. Download Swank data:
 a. Click on "Links" in the left-hand menu
@@ -80,10 +80,9 @@ Note: swank.py requires
 - BeautifulSoup: install by typing `pip install beautifulsoup4` into Terminal (on a Mac)
 
 
-**How to Use the PDF splitting and metadata formatting scripts**:
+## How to Use the PDF splitting and metadata formatting scripts:
 
-Duplicating and Cropping the Tahoma West pdf:
-===============================
+### Duplicating and Cropping the Tahoma West pdf:
 
 Note: instruction adapted from [this blog post](http://ciantic.blogspot.com/2011/09/duplicate-all-pages-in-acrobat-x.html)
 
@@ -100,8 +99,7 @@ Note: instruction adapted from [this blog post](http://ciantic.blogspot.com/2011
 11. If successful, you should now have a document containing only the Tahoma West publications, one pdf page per Tahoma West page (in order). 
   
 
-Creating/Renaming Individual Tahoma West Publication Files:
-===============================
+### Creating/Renaming Individual Tahoma West Publication Files:
 
 1. Create a new folder to store your individual tahoma west publication files (e.g. ‘tw’) the folder containing your files and scripts  
 2. Select the pages corresponding to the first TW publication, drag these pages into the folder you just created (on a mac, this file will be named “Tahoma_West_2016 (dragged).pdf”) 
@@ -114,7 +112,7 @@ Creating/Renaming Individual Tahoma West Publication Files:
 9. Now type ```python3 namepdfs.py```, follow the prompts. When you see the text ```files renamed!```, open the folder containing your dragged pdfs. They should all be renamed appropriately, if not, good thing you made that backup folder!
 
 
-**How to Use the MAIS Metadata Web Scraping scripts**:
+## How to Use the MAIS Metadata Web Scraping scripts:
 
 1. Open the `maisWeb.py` script in your preferred text editor.
 2. Replace the links in lines 27, 28, 76, and 78 to reflect the links to the ResearchWorks archive pages containing the MAIS capstones you will be obtaining the metadata for (e.g. [line 27](https://digital.lib.washington.edu/researchworks/handle/1773/20063/browse?rpp=20&sort_by=2&type=dateissued&offset=0&etal=-1&order=ASC)).
